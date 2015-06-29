@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+
+host: m.3gstar.com.ua

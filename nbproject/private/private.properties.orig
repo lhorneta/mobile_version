@@ -1,0 +1,13 @@
+copy.src.files=false
+copy.src.on.open=false
+copy.src.target=
+index.file=index.php
+<<<<<<< local
+remote.connection=3-GStar-7e1c9b
+=======
+remote.connection=3gstar-fb21ae
+remote.directory=/m.3gstar.com.ua
+>>>>>>> other
+remote.upload=ON_SAVE
+run.as=REMOTE
+url=http://m.3gstar.com.ua/

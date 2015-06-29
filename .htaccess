@@ -1,0 +1,119 @@
+AddDefaultCharset UTF-8           
+
+RewriteEngine on
+RewriteRule ^index.php?$ / [QSA,R]
+Options All -Indexes
+ErrorDocument 404 http://m.3gstar.com.ua/templates/error.php
+ErrorDocument 403 http://m.3gstar.com.ua/templates/error.tpl
+
+RewriteCond %{HTTP_HOST} ^www.m.3gstar.com.ua
+RewriteRule (.*) http://m.3gstar.com.ua/$1 [R=301,L]
+
+<ifModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml application/xml application/xhtml+xml text/css text/javascript application/javascript application/x-javascript
+</ifModule>
+
+# ���������� ����������� ������ �� ������� �������
+<FilesMatch .*\.(css|js|php|phtml|shtml|html|xml)$>
+    Header append Cache-Control private
+</FilesMatch>
+
+<IfModule mod_gzip.c>
+    mod_gzip_on         Yes
+    mod_gzip_dechunk    Yes
+    mod_gzip_item_include file		\.(html?|txt|css|js|php|pl)$
+    mod_gzip_item_include mime		^text\.*
+    mod_gzip_item_include mime		^application/x-javascript.*
+    mod_gzip_item_exclude mime		^image\.*
+    mod_gzip_item_exclude rspheader	^Content-Encoding:.*gzip.*
+</IfModule>
+
+<ifModule mod_headers.c>
+    #���������� html � htm ����� �� ���� ����
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "max-age=43200"
+    </FilesMatch>
+    #���������� css, javascript � ��������� ����� �� ���� ������
+    <FilesMatch "\.(js|css|txt)$">
+        Header set Cache-Control "max-age=604800"
+    </FilesMatch>
+    #���������� ���� � ����������� �� �����
+    <FilesMatch "\.(flv|swf|ico|gif|jpg|jpeg|png)$">
+        Header set Cache-Control "max-age= 604800"
+    </FilesMatch>
+    #��������� �����������
+    <FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi)$">
+        Header unset Cache-Control
+    </FilesMatch>
+</IfModule>
+
+
+
+<IfModule mod_deflate.c>
+
+AddOutputFilterByType DEFLATE text/html
+
+AddOutputFilterByType DEFLATE application/javascript
+
+AddOutputFilterByType DEFLATE text/javascript
+
+AddOutputFilterByType DEFLATE text/css
+
+<IfModule mod_setenvif.c>
+
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+
+BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+</IfModule>
+
+ </IfModule>  
+<ifModule mod_headers.c>
+  <filesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+    Header unset ETag
+    FileETag None
+ </filesMatch>
+</ifModule>
+
+<ifModule mod_headers.c>
+  Header unset Last-Modified
+</ifModule>
+
+# ���������� �� ������ ������� �������������� ��������� ���������� HTTP-������� (������� ������������������ �������)
+php_value magic_quotes_gpc "0"
+php_value register_globals "0"
+php_value register_long_arrays "0"
+
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule (favicon\.ico)$ favicon.ico [L]
+RewriteRule (robots\.txt)$ robots.txt [L]
+
+# ��������� "������" ���������
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+BrowserMatch Konqueror no-gzip
+BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+Header append Vary User-Agent
+
+# ������ ��������� ETag
+FileETag MTime Size
+
+ExpiresActive On
+ExpiresDefault "now"
+ExpiresDefault "access plus 1 seconds"
+ExpiresByType text/html "access plus 4 seconds"
+ExpiresByType image/x-icon "access plus  604800 seconds"
+ExpiresByType image/gif "access plus  604800 seconds"
+ExpiresByType image/jpeg "access plus  604800 seconds"
+ExpiresByType image/png "access plus  604800 seconds"
+ExpiresByType text/css "access plus 604800 seconds"
+
+<IfModule mod_headers.c>
+Header append Cache-Control "no-store, no-cache, must-revalidate"
+</IfModule>
