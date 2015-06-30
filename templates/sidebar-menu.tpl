@@ -13,6 +13,11 @@ include_once 'helpers/helper_menu_mob.php';          //подключение м
             
                 $catalog_url = $_SERVER['REQUEST_URI'];
                 $html="";
+                if('/' === $catalog_url){
+                    $html .= "<li class='home-page-menu'><span>Главная</span></li>";
+                }else{
+                    $html .= "<li class='home-page-menu'><a href='".SITE_URL."'>Главная</a>";
+                }
                     foreach ($SMA as $key => $title) {
                         $html .="<li><a href ='#router'>".$name_cat[$key]."</a><ul>";
                         foreach ($title as $value) {

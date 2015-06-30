@@ -11,9 +11,7 @@ class ModelArticle extends Model {
      */
     public $db_result = array();
 
-    public function action_index() {
-    
-    }
+    public function action_index() {}
 
     public function getArticleContentById($id) {
 
@@ -22,10 +20,7 @@ class ModelArticle extends Model {
             `" . DB_PREFIX . "articles_description`.`articles_name`,
             `" . DB_PREFIX . "articles_description`.`articles_description`
             FROM `" . DB_PREFIX . "articles_description`
-            LEFT JOIN `" . DB_PREFIX . "articles`
-            ON `" . DB_PREFIX . "articles`.`articles_id` = `" . DB_PREFIX . "articles_description`.`articles_id`    
             WHERE `" . DB_PREFIX . "articles_description`.`articles_id` = " . $id . "
-            AND `" . DB_PREFIX . "articles`.`articles_status` = 1
         ");
 
         if (DB::nr($q) <> 0) {

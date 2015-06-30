@@ -26,5 +26,8 @@
 					</form>
 				</div>	
 			</div>
+			
 	</div> 
+	<div id="continue_shopping"><a href="<?=SITE_URL;?>" title="продолжить покупки">Продолжить покупки</a>
+								</div>
 </div>

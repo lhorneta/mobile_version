@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Projects/m.3gstar.com.ua/templates/information-page.tpl</file>
-            <file>file:/D:/Projects/m.3gstar.com.ua/templates/footer.tpl</file>
-            <file>file:/D:/Projects/m.3gstar.com.ua/config/config.php</file>
+            <file>file:/D:/Projects/m.3gstar.com.ua/templates/mainpage.tpl</file>
+            <file>file:/D:/Projects/m.3gstar.com.ua/css/all.css</file>
             <file>file:/D:/Projects/m.3gstar.com.ua/js/all.js</file>
-            <file>file:/D:/Projects/m.3gstar.com.ua/system/router.php</file>
+            <file>file:/D:/Projects/m.3gstar.com.ua/templates/header.tpl</file>
         </group>
     </open-files>
 </project-private>
