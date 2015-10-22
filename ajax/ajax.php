@@ -254,10 +254,10 @@ class Ajax_Hendler {
 
     public function connect() {
 
-        define('HOST', 'localhost');
-        define('USER', 'u_3gstar');
-        define('PASSWORD', 'ZunxnNwa');
-        define('NAME', '3gstar');
+        define('HOST', '#######');
+        define('USER', '#######');
+        define('PASSWORD', '#######');
+        define('NAME', '#######');
 
         $connect = mysql_connect(HOST, USER, PASSWORD);
         $db = mysql_select_db(NAME);

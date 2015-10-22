@@ -15,8 +15,8 @@
  define('DEBUG', FALSE );
  define('ERRORS', FALSE);
  define('DS', DIRECTORY_SEPARATOR);
- define('FULL_SITE', 'https://3gstar.com.ua/');
- define('SITE_URL', 'http://m.3gstar.com.ua/');
+ define('FULL_SITE', '#######');
+ define('SITE_URL', '#######');
  define('CATEGORY', 'category');
  define('PRODUCT', 'product');
  define('ARTICLE', 'article');
