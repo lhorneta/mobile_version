@@ -12,6 +12,7 @@ class Article extends Controller{
     function __construct(){
     
         $this->view = new Controller_View();
+        $this->response = new Response();
     }
     
     public function action_index($link){
@@ -19,7 +20,7 @@ class Article extends Controller{
     }
 
     public function getArticleById($url){
-        $article_url = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_DEFAULT);
+        $article_url = $this->response->getUrl();
         $aid = substr($url, 3);
         $article = new ModelArticle();
         $content = $article->getArticleContentById($aid);

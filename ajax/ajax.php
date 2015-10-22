@@ -234,6 +234,12 @@ class Ajax_Hendler {
                     $form = $http['form'];
                     $this->setOrder($phone, $form);
                     break;
+                    break;
+                case 'consulting_specialist':
+                    $phone = $http['consulting_specialist'];
+                    $form = $http['form'];
+                    $this->setOrder($phone, $form);
+                    break;
                 case 'try_30_day':
                     $phone = $http['try_30_day'];
                     $form = $http['form'];
@@ -266,20 +272,20 @@ class Ajax_Hendler {
         foreach ($user as $item) {
             $phone = $item['userPhone'];
             $orders = array(
-                        "customers_name" => $item['userName'],
-                        "customers_city" => $item['userName'],
-                        "customers_telephone" => $item['userPhone'],
-                        "delivery_name" => $item['userName'],
-                        "delivery_city" => $item['userName'],
-                        "billing_name" => $item['userName'],
-                        "billing_city" => $item['userName'],
-                        "last_modified" => date("Y-m-d H:i:s"),
-                        "date_purchased" => date("Y-m-d H:i:s"),
-                        "orders_status" => "1",
-                        "currency" => "RUR",
-                        "currency_value" => "1.000000",
-                        "customers_referer_url" => getenv('HTTP_REFERER'),
-                        "shipping_module" => "free_free"
+                "customers_name" => $item['userName'],
+                "customers_city" => $item['userName'],
+                "customers_telephone" => $item['userPhone'],
+                "delivery_name" => $item['userName'],
+                "delivery_city" => $item['userName'],
+                "billing_name" => $item['userName'],
+                "billing_city" => $item['userName'],
+                "last_modified" => date("Y-m-d H:i:s"),
+                "date_purchased" => date("Y-m-d H:i:s"),
+                "orders_status" => "1",
+                "currency" => "RUR",
+                "currency_value" => "1.000000",
+                "customers_referer_url" => getenv('HTTP_REFERER'),
+                "shipping_module" => "free_free"
             );
 
             $address_book = array(
@@ -302,7 +308,19 @@ class Ajax_Hendler {
         }
 
         $last_customers_id = mysql_fetch_row(mysql_query("SELECT MAX(`customers_id`) FROM `orders`"));
-        $last_orders_id = mysql_fetch_row(mysql_query("SELECT MAX(`orders_id`) FROM `orders`"));
+        
+		$last_orders_id = mysql_fetch_row(mysql_query("SELECT MAX(`orders_id`) FROM `orders`"));
+		$current_date_from_order = substr($last_orders_id[0], 0, -3);
+		$current_date = date('ymd');
+		$new_order = 1001;
+		
+		if ($current_date_from_order === $current_date){
+			$last_orders_id = mysql_fetch_row(mysql_query("SELECT MAX(`orders_id`) FROM `orders`"));
+			$order_id_new = ($last_orders_id[0]+1);
+		}else{
+			$new = substr($new_order, 1);
+			$order_id_new = $current_date.$new;
+		}
 
         /* 1-st query */
         $sql1 = "INSERT INTO `address_book` (`customers_id`,`entry_lastname`, `entry_city`) VALUES (" . "'" . ($last_customers_id[0] + 1) . "',";
@@ -323,12 +341,13 @@ class Ajax_Hendler {
         /* 1-st query */
 
         /* 2-nd query */
-        $sql = "INSERT INTO `orders` (`customers_id`,
+        $sql = "INSERT INTO `orders` (`orders_id`, `customers_id`,
 			`customers_name`,`customers_city`,`customers_telephone`,
 			`delivery_name`,`delivery_city`,`billing_name`,`billing_city`,
 			`last_modified`,`date_purchased`,`orders_status`,`currency`,
 			`currency_value`,`customers_referer_url`,`shipping_module`) 
-			VALUES (" . "'" . ($last_customers_id[0] + 1) . "',";
+			VALUES (" . "'" . $order_id_new . "',
+						 '" . ($last_customers_id[0] + 1) . "',";
         $comma = ',';
         $i = 0;
         $length = count($orders);
@@ -351,7 +370,7 @@ class Ajax_Hendler {
         foreach ($orders_product as $value) {
             $coma = ',';
             $len2 = count($orders_product);
-            $sql2 = "INSERT INTO `orders_products`(`orders_id`,`products_id`, `products_name`,`products_price`, `final_price`,`products_quantity`) VALUES (" . "'" . ($last_orders_id[0] + 1) . "',";
+            $sql2 = "INSERT INTO `orders_products`(`orders_id`,`products_id`, `products_name`,`products_price`, `final_price`,`products_quantity`) VALUES (" . "'" . $order_id_new . "',";
 
             foreach ($value as $val) {
 
@@ -373,7 +392,7 @@ class Ajax_Hendler {
 
 
         /* 4-th query */
-        $sql3 = "INSERT INTO `orders_status_history` (`orders_id`,`orders_status_id`,`date_added`, `customer_notified`) VALUES (" . "'" . ($last_orders_id[0] + 1) . "','1','" . date("Y-m-d H:i:s") . "','1');";
+        $sql3 = "INSERT INTO `orders_status_history` (`orders_id`,`orders_status_id`,`date_added`, `customer_notified`) VALUES (" . "'" . $order_id_new . "','1','" . date("Y-m-d H:i:s") . "','1');";
         mysql_query($sql3);
         echo $sql3;
         /* 4-th query */
@@ -383,7 +402,7 @@ class Ajax_Hendler {
 			`orders_total` (
 			`orders_id`,`title`,`text`, `value`,
 			`class`,`sort_order`
-			) VALUES (" . "'" . ($last_orders_id[0] + 1) . "','Стоимость товара'," . $total[0]['total'] . " грн.','" . $total[0]['total'] . "','ot_subtotal','1');";
+			) VALUES (" . "'" . $order_id_new . "','Стоимость товара'," . $total[0]['total'] . " грн.','" . $total[0]['total'] . "','ot_subtotal','1');";
         mysql_query($sql4);
         echo $sql4;
         /* 5-th query */
@@ -393,13 +412,13 @@ class Ajax_Hendler {
 			`orders_total` (
 			`orders_id`,`title`,`text`, `value`,
 			`class`,`sort_order`
-			) VALUES (" . "'" . ($last_orders_id[0] + 1) . "','Всего:','<b>" . $total[0]['total'] . " грн.</b>','" . $total[0]['total'] . "','ot_total','800');";
+			) VALUES (" . "'" . $order_id_new . "','Всего:','<b>" . $total[0]['total'] . " грн.</b>','" . $total[0]['total'] . "','ot_total','800');";
         mysql_query($sql5);
         echo $sql5;
         /* 6-th query */
 
         //send sms and email
-        $order_id = ($last_orders_id[0] + 1);
+        $order_id = $order_id_new;
         $phoneCustomer = $user[0]['userPhone'];
         $nameCustomer = $user[0]['userName'];
         $total = $total[0]['total'];

@@ -37,21 +37,21 @@ class Controller_View extends View{
             
             $searchCat = '
                 <div class="resize_one parent_category">
-                        <a href=' . "?" . $content['link'] . '>
+                        <a href="' . $content['link'] . '">
                                 ' . $content['categories_heading_title'] . '
                         </a>
                 </div><a class="rel_style" href="#menu"></a>';
  
             $searchProduct = '
                 <div class="resize_one">
-                            <a href=' . "?" . $content['link'] . '>
+                            <a href="' . $content['link'] . '">
                                 ' . $content['categories_heading_title'] . '
                             </a>
                         </div><a class="rel_style" href="#menu"></a>';
     
             $searchInfo = '
                 <div class="resize_one parent_category">
-                        <a href=' . "?" . $content . '>
+                        <a href="'.SITE_URL.'Stati-posvjaschennye-internetu-t-2.html">
                                 ' . $content . '
                         </a>
                 </div><a class="rel_style" href="#menu"></a>';
@@ -69,23 +69,21 @@ class Controller_View extends View{
                 $search = $searchInfo;
               }
         }else{
-            $this->getContent('yandex-search.tpl', '');
+            $this->getContent('yandex-search.tpl');
             $search = '';
         }
 
         parent::doHeader('sidebar-menu.tpl', $search);
     }
 
-    public function getContent($template, $content) {
+    public function getContent($template, $content='') {
         if ($template) {
             parent::doDisplay($template, $content);
         }
     }
 
-    public function getFooter($tpl) {
-        $template = ($tpl === 'mainpage') ? 'footer.tpl' : 'footer-menu.tpl';
-
-        parent::doFooter($template);
+    public function getFooter($tpl,$content='') {
+        parent::doFooter($tpl,$content);
     }
 
     public function get404() {
@@ -93,7 +91,15 @@ class Controller_View extends View{
     }
 
     public function popupLocalstorageNotSupport() {
-        parent::localstorageNotSupport('popup-localstorage.tpl');
+        parent::showModal('popup-localstorage.tpl');
     }   
-    
+
+    public function searchYandexModal() {
+        parent::showModal('popup-search.tpl');
+    }   
+
+    public function getEndBody() {
+        parent::getAnalytics('analytics.tpl');
+        parent::end('end.tpl');
+    }   
 }

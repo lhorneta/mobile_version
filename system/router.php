@@ -38,14 +38,20 @@ class Router {
      */
     public $type;
 
-    function __construct() {}
+    function __construct() {
+        $this->response = new Response();
+    }
      
     public function action_index() {}
 
     public function getUrlParameters() {
 
-        $url = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_DEFAULT);
-        
+        $url = $this->response->getUrl();
+
+        if($this->response->findChar($url)>0){
+            $this->response->redirect(SITE_URL.$this->response->trim($url));
+        }
+ 
         $request = new Request();
            
         if(!isset($request->post['key'])){
@@ -60,12 +66,15 @@ class Router {
                     'tarifi'        => 'tarifi',
                     'pokritie'      => 'pokritie',
                     'cart'          => 'cart',
+                    'utm'           => 'utm_source',
+                    'gclid'         => 'gclid',
                     'mtc-konnekt'   => 'mtc-konnekt',
                     'mainpage'      => 'mainpage',
                     'contakti'      => 'contakti',
                     'search'        => 'search',
                     'oplata'        => 'oplata',
-                    'dostavka'      => 'dostavka'
+                    'dostavka'      => 'dostavka',
+                    'otzivi'        => 'otzivi'
                  );
 
                 $redirect = null;
@@ -74,6 +83,7 @@ class Router {
                     $pos_begin = stripos($url, $param_type);
                     $parts = explode(".html", substr($url, $pos_begin));
                     $param = $parts[0];
+                    //var_dump($param);
                     if ($pos_begin !== false) {
                         $this->frontController($key, $param);
                         $redirect .= $param;
@@ -84,11 +94,11 @@ class Router {
                 }
                 if ($redirect === '') {
                     $url_redirect = substr($param, 2);
-                    $redirect = '' ? $this->frontController('404', '') :
-                    $this->redirectTo($url_redirect);
+                    $redirect = '' ? $this->frontController('404') :
+                    $this->response->redirect(FULL_SITE.$url_redirect.'.html');
                 }
             } else {
-                $this->frontController('mainpage', '');
+                $this->frontController('mainpage');
             }
             
         }else{
@@ -98,19 +108,7 @@ class Router {
 
     }
 
-    public function redirectTo($u_param) {
-        header('HTTP/1.1 301 Moved Permanently');
-        header("Location: " . FULL_SITE . $u_param . ".html");
-        exit();
-    }
-  
-    public function ajax() {
-        header('HTTP/1.1 301 Moved Permanently');
-        header("Location: " . FULL_SITE . $u_param . ".html");
-        exit();
-    }
-
-    public function frontController($tpl_controller, $parameters) {
+    public function frontController($tpl_controller, $parameters='') {
        // echo "<p>tpl_controller: ".$tpl_controller." ".$parameters."</p>";
         
         switch ($tpl_controller) {
@@ -127,10 +125,13 @@ class Router {
             case "404": 	$type = "404"; break;
             //static pages
             case "cart": 	$type = "cart"; break;
+            case "utm": 	$type = "utm_source"; break;
+            case "gclid": 	$type = "gclid"; break;
             case "contakti": 	$type = "contakti"; break;
             case "search": 	$type = "search"; break;
             case "oplata": 	$type = "oplata"; break;
             case "dostavka": 	$type = "dostavka"; break;
+            case "otzivi": 	$type = "otzivi"; break;
             default:'';
         }
 

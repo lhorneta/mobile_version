@@ -1,7 +1,7 @@
 <?php
 //11.06.2015 Чижевский Михаил (Циклические ссылки)
 include_once 'helpers/helper_menu_mob.php';          //подключение массива ссылок и шаблонов 
-// $SMA - это массив всех ссылк.        
+// $SMA - это массив всех ссылок.        
 ?> 
 <!--  шапка + меню -->
 <div id="place-holder">
@@ -13,6 +13,7 @@ include_once 'helpers/helper_menu_mob.php';          //подключение м
             
                 $catalog_url = $_SERVER['REQUEST_URI'];
                 $html="";
+                $html .= "<li><span class='call_phone'><a href='tel:0 (800) 210-295'>0 (800) 210-295</a></span></li>";
                 if('/' === $catalog_url){
                     $html .= "<li class='home-page-menu'><span>Главная</span></li>";
                 }else{
@@ -30,11 +31,18 @@ include_once 'helpers/helper_menu_mob.php';          //подключение м
                         $html .= "</ul></li>";
                     }
                 //Еще один костыль
-                if('/?Stati-posvjaschennye-internetu-t-2.html' === $catalog_url){
+                if('/Stati-posvjaschennye-internetu-t-2.html' === $catalog_url){
                     $html .= "<li><span>Статьи</span></li>";
                 }else{
-                    $html .= "<li><a href='/?Stati-posvjaschennye-internetu-t-2.html'>Статьи</a>";
+                    $html .= "<li><a href='/Stati-posvjaschennye-internetu-t-2.html'>Статьи</a>";
                 }
+                if('/otzivi.html' === $catalog_url){
+                    $html .= "<li><span>Отзывы о нас</span></li>";
+                }else{
+                    $html .= "<li><a href='/otzivi.html'>Отзывы о нас</a>";
+                }
+
+                $html .="<li><a href='https://3gstar.com.ua/?from_mobile=true'>Перейти на полную версию сайта</a>";
                 echo $html;
             ?>   
         </ul>

@@ -1,4 +1,4 @@
-<a href="<?="index.php?".substr($item['link'], 1);?>">
+<a href="<?=substr($item['link'], 1);?>">
    <div class="card-blocks">
 
         <div class="container">

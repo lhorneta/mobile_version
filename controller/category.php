@@ -11,6 +11,7 @@ class Category extends Controller {
     function __construct(){
         $this->request = new Request();
         $this->view = new Controller_View();
+        $this->response = new Response();
     }
     
     public function action_index() {
@@ -18,20 +19,33 @@ class Category extends Controller {
     }
     
     public function getCategoryById($link) {
+        
+        if(substr_count($link, "_")>=1){
+            $id_cat = explode("_", $link);
+            $max_key = max(array_keys($id_cat));
+            $link = "-c-".$id_cat[$max_key];
+            $pos = substr($this->response->getUrl(), 0, stripos($this->response->getUrl(), "-c-"));
+            $redirect = SITE_URL.$this->response->trim($pos).$link.".html";
+            $this->response->redirect($redirect);
+        }
+
         $arrayCategoriesUrl = new ModelCategory();
+        
         $content = $arrayCategoriesUrl->getCategoryById($link);
         $parent_category = $content[0];
         $_SESSION['parent_category'] = $parent_category;
+	if($content[0]["categories_id"]==104){$this->response->redirect("modem-proizvoditeli-mob-a-148.html");}
         if ($content) {
             $cid = $content[0]['categories_id'];
+            $products_number = $arrayCategoriesUrl->getProductsNumber($cid);
 	    (int) $this->getCategoryTDKbyId($cid);
             $this->view->getSidebar('category', $_SESSION['parent_category']);
 
             /*pagination*/
-            $products_number = $arrayCategoriesUrl->getProductsNumber($cid);
             echo "<div class='category'>";
             (int) $this->getProductsByCategory($cid,'category');
             echo  "</div>";
+            if(ITEM_TO_CATEGORY < $products_number){
             echo  "
                    <div class='container'> <form class='following-products'>
                         <div class='show_load'>Показано 
@@ -45,16 +59,19 @@ class Category extends Controller {
                         >
                         <img
                              src='".IMG.'/ajax-loader.gif'."' "
-                            . "width='16px' height='16px'"
+                            . "width='16' height='16'"
                             . "title='loader' alt='img loader'>"
                     . "Показать еще ".ITEM_TO_CATEGORY." моделей...</div>
                     </form></div>
                 ";
-             /*end pagination*/
+            }
+            /*end pagination*/
             
         } else {
-            $this->view->getContent('404.tpl', '');
+        //   $this->view->getContent('error.php');
+            $this->response->redirectToMainSite();
         }
+
     }
     
     public function getCategoryTDKbyId($id) {
@@ -63,7 +80,8 @@ class Category extends Controller {
         if ($content) {
             $this->view->getHeader('header.tpl', $content);
         } else {
-            $this->view->getContent('404.tpl', '');
+        //    $this->view->getContent('error.php');
+            $this->response->redirectToMainSite();
         }
     }
 	

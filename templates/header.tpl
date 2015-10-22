@@ -9,7 +9,7 @@
         <meta name="keywords" content="<? if(isset($item[2])){echo $item[2];}?>" />
         <!-- Bootstrap -->
         <link href="<?=CSS.'/all.css';?>" rel="stylesheet">
-        <link rel="canonical" href="<?=FULL_SITE;?>" />
+        <link rel="canonical" href="<? echo FULL_SITE.substr(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_DEFAULT),1);?>" />
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

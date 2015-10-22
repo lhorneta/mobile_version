@@ -18,9 +18,9 @@ class Pagination {
         $content = array();
         //echo "<br/>limit_start ".$limit_start."<br/> limit_end ".$limit_end."<br/>";
         foreach ($items as $key => $item) {
-            
-            if ($key >= $limit_start && $key < $limit_end) {
-               // echo " ".$key;
+            $key++;
+            if ($key > $limit_start && $key <= $limit_end) {
+              //  echo " ".$key;
                 $content[] = $item;
             }
         }
@@ -30,7 +30,7 @@ class Pagination {
             if ($content) {
                 $this->view->getContent('category.tpl', $content);
             } else {
-                $this->view->getContent('404.tpl', '');
+                $this->view->getContent('404.tpl');
             }
             
         } else {

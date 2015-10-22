@@ -11,6 +11,7 @@ class Information_Page extends Controller {
     
     function __construct(){
         $this->view = new Controller_View();
+        $this->response = new Response();
     }
 	
     public function action_index($url) {
@@ -19,15 +20,21 @@ class Information_Page extends Controller {
     }
 
     public function getInformationPageId($url) {
+        
         $page_id = new ModelInformationPage();
         $ipid = $page_id->getInformationPageIdByLink($url);
         $id = $ipid[0];
-        $id = ($id==='43')?$id=131:$id;//да, это костыль, а ты идеален?
+
+        switch($id){//301 redirects in 3gstar
+            case 43:  $id=131;
+           // case 133: $id=131;
+        }
+
         if ($id) {
             $this->getInformationPageTDK($id);
             $this->getInformationPageDescription($id);
         } else {
-            $this->view->getContent('404.tpl', '');
+            $this->response->redirectToMainSite();
         }
     }
 
@@ -37,12 +44,12 @@ class Information_Page extends Controller {
         if ($content) {
             $this->view->getHeader('header.tpl', $content);
         } else {
-            $this->view->getContent('404.tpl', '');
+            $this->response->redirectToMainSite();
         }
     }
 
     public function getInformationPageDescription($id) {
-	$page_url = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_DEFAULT);
+	$page_url = $this->response->getUrl();
         $info_page = new ModelInformationPage();
         $page = $info_page->getInformationPageById($id);
         $this->view->getSidebar($page_url, $page[0]['pages_name']);

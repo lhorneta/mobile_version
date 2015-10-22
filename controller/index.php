@@ -32,19 +32,18 @@ class Controller_Index extends Controller {
     function __construct(){
         $this->view = new Controller_View();
 	$this->request = new Request();
+        $this->response = new Response();
     }
-	
+    
     public function indexAction($type, $url_param) {
         $this->setStaticTemplates();
         $this->getTypeOfTemplateDisplay($type, $url_param);
-        $this->getParentCategory($type);
         $this->setDinamicTemplates($type);
+        $this->setEndBody();
     }
     
-    
     public function getTDKStaticPagesHelper(){
-        $content = parent::load(HELPERS_PATH,'helper_tdk_inner_pages.php');
-        return $content;
+        return parent::load(HELPERS_PATH,'helper_tdk_inner_pages.php');
     }
 	
     public function getTypeOfTemplateDisplay($type, $url_param) {
@@ -74,39 +73,41 @@ class Controller_Index extends Controller {
             case "tarifi": $obj = new Information_Page(); $obj->action_index($url_param);break;
             case "pokritie": $obj = new Information_Page(); $obj->action_index($url_param);break;
             case "mtc-konnekt": $obj = new Information_Page(); $obj->action_index($url_param);break;
-            case "undefined":  $this->view->getHeader('header.tpl',''); $this->getStaticPage("404","404 - Страница не найдена"); $this->view->get404(); break;
+            case "otzivi": $obj = new Information_Page(); $obj->action_index($url_param);break;
+            case "undefined":  $this->view->getHeader('header.tpl'); $this->getStaticPage("404","404 - Страница не найдена"); $this->view->get404(); break;
             case "template":  $obj = new Template(); $obj->action_index($url_param);break;
             case "cart": $this->getStaticPage("cart","Корзина");break;
-            case "mainpage":$this->getStaticPage("mainpage","");break;
+            case "mainpage":$this->getStaticPage("mainpage");break;
+            case "utm":$this->getStaticPage("mainpage");break;
+            case "gclid":$this->getStaticPage("mainpage");break;
             case "404": $this->getStaticPage("404","404 - Страница не найдена");break;
             case "contakti": $this->getStaticPage("contakti","Контакты");break;
-            case "search": $this->getStaticPage("search","");break;
+            case "search": $this->getStaticPage("search");break;
             case "oplata": $this->getStaticPage("oplata","Оплата");break;
             case "dostavka": $this->getStaticPage("dostavka","Доставка");break;
-            default: $this->getStaticPage("mainpage","");break;
+            default: $this->getStaticPage("mainpage");break;
         }
     }
 	
-    public function getStaticPage($page_type,$title) {
-            $tdk = $this->getTDKStaticPagesHelper();
-            $this->view->getHeader('header.tpl',$tdk[$page_type]);
-            $this->view->getSidebar($page_type, $title);
-            $this->view->getContent($page_type.TPL, '');
-	}
+    public function getStaticPage($page_type,$title="") {
+        $obj = new Header();
+        $obj->action_index($page_type);
+        $this->view->getSidebar($page_type, $title);
+        $this->view->getContent($page_type.TPL);
+    }
 	
     public function setStaticTemplates() {
         $this->view->indexAction();
     }
 
-    public function getParentCategory($type) {
-        if ($type !== 'category' && $type !== 'product') {
-          //  $this->view->getSidebar($type, '');
-        }
-    }
-
     public function setDinamicTemplates($type) {
 	$this->view->popupLocalstorageNotSupport();
-        $this->view->getFooter($type);
+	$this->view->searchYandexModal();
+        $obj = new Footer();
+        $obj->action_index($type);
     }
 
+    public function setEndBody() {
+        $this->view->getEndBody();
+    }
 }

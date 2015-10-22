@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <h1>Результаты поиска</h1>
+        <div class="btn-home">Напишите ваш запрос в строке "Поиск по сайту", нажмите кнопку "Найти"</div>
         <div id="ya-site-results" onclick="
             return {
                 'tld': 'ru',

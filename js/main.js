@@ -21,6 +21,30 @@ $(function () {
 
     });
 
+    /*Форма Получить консультацию у специалиста*/
+    $('.btn-product-specialist').click(function (e) {
+        e.preventDefault();
+        var
+            phone = $('#inputEmail1').val(),
+            form = $('input[name=form]').val();
+        if (phone !== '') {
+            $('.min_form,.form-horizontal').hide();
+            $('.min_form_load').show();
+            $.ajax({
+                url: 'ajax/ajax.php',
+                type: 'post',
+                data: {consulting_specialist: phone, form: form},
+                success: function (data) {
+                    $('.min_form_load').hide();
+                    $('.min_form_succ').show();
+                    $('#inputEmail1').val('');
+                }
+            });
+        }
+
+    });
+    /*end Форма Получить консультацию у специалиста*/
+
     /*Форма с экспертом*/
     $('.btn-product-request').click(function (e) {
         e.preventDefault();
@@ -82,7 +106,6 @@ $(function () {
     /*end mobile detected*/
 });
 
-
 var step = $('.pagination').attr('data-count'),
 max = $('.pagination').attr('data-count-max');
 if(max<step){$('.pagination,.show_load').remove();}
@@ -106,13 +129,14 @@ $('.pagination').click(function(){
         success: function (data) {
             var step = $('.pagination').attr('data-count'),
             max = $('.pagination').attr('data-count-max'),
-            counter = (+$('.category a').length)+1;
+            steps = (+step)+15;
             $('.category').append(data);
             step = (+step)+15;
             $('.pagination').attr('data-count',step);
             $('.show_load span').text(step);
+            console.log("steps",max,steps);
             loader.hide();
-            if(max<step){
+            if(max<=step){
             $('.pagination,.show_load').remove();}
         }
     });

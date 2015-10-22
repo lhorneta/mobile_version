@@ -1,1 +1,1 @@
-<li><a href="<?='?'.$item['link'];?>"><?=$item['articles_name']?></a></li>
+<li><a href="<?=$item['link'];?>"><?=$item['articles_name']?></a></li>

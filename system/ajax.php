@@ -15,7 +15,6 @@ class Ajax {
         
         switch ($http['data']){
             case 'pagination':
-              //  echo "count: ".$http['count']."<br/>";
                 $limit_start = $http['count'];
                 $limit_end = ITEM_TO_CATEGORY + $limit_start;
                 $pagination = new Pagination();

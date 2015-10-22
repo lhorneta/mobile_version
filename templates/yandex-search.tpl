@@ -5,16 +5,18 @@
              'arrow':false,
              'bg':'transparent',
              'fontsize':14,
-             'fg':'#000000',
+             'fg':'transparent',
              'language':'ru',
              'logo':'rb',
-             'publicname':'Yandex Site Search #2222990',
+            /* 'publicname':'Yandex Site Search #2222990', native*/
+             'publicname':'Yandex Site Search #2119378',/*from 3gstar*/
              'suggest':true,
              'target':'_self',
              'tld':'ru',
              'type':2,
              'usebigdictionary':true,
-             'searchid':2222990,
+             /*'searchid':2222990, mobile id-search-yandex*/
+             'searchid':2119378,/*id-search-yandex from 3gstar*/
              'webopt':false,
              'websearch':false,
              'input_fg':'#000000',
@@ -29,8 +31,8 @@
             <input type="hidden" name="searchid" value="2222990"/>
             <input type="hidden" name="l10n" value="ru"/>
             <input type="hidden" name="reqenc" value=""/>
-            <input type="search" name="text" value=""/>
-            <input type="submit" value="Найти"/>
+            <input type="search" autofocus name="text" value=""/>
+            <input type="submit" value=""/>
         </form>
     </div>
     <style type="text/css">

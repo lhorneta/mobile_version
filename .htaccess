@@ -1,7 +1,16 @@
 AddDefaultCharset UTF-8           
 
 RewriteEngine on
-RewriteRule ^index.php?$ / [QSA,R]
+
+RewriteRule    ^([A-Za-z0-9-]+).html$    index.php?$1    [NC,L]
+RewriteRule    ^cart$    index.php?cart    [NC,L]
+RewriteRule    ^mainpage$    ?mainpage    [NC,L]
+RewriteRule    ^oplata$    index.php?oplata    [NC,L]
+RewriteRule    ^contakti$  index.php?contakti    [NC,L]
+RewriteRule    ^dostavka$  index.php?dostavka    [NC,L]
+
+#RewriteRule ^index.php?$ / [QSA,R]
+
 Options All -Indexes
 ErrorDocument 404 http://m.3gstar.com.ua/templates/error.php
 ErrorDocument 403 http://m.3gstar.com.ua/templates/error.tpl

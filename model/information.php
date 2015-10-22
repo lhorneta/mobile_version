@@ -42,7 +42,7 @@ class ModelInformationPage extends Model {
                 FROM `" . DB_PREFIX . "pages_description`
                 WHERE `" . DB_PREFIX . "pages_description`.`pages_id` = '" . $id . "'
         ");
-
+        
         if (DB::nr($q) <> 0) {
             while ($row = DB::fa($q)) {
                 $db_result[] = $row;

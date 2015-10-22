@@ -15,7 +15,7 @@ class ModelCategory extends Model {
 
     public function getAllCategories() {
         $q = DB::q("
-            SELECT 
+            SELECT
             `" . DB_PREFIX . "categories`.`categories_id`,
             `" . DB_PREFIX . "categories_description`.`categories_heading_title`,
             `" . DB_PREFIX . "my_structure`.`link`
@@ -50,6 +50,7 @@ class ModelCategory extends Model {
             LEFT JOIN `" . DB_PREFIX . "my_structure`
             ON `" . DB_PREFIX . "my_structure`.`idt` = `" . DB_PREFIX . "categories`.`categories_id`
             WHERE `" . DB_PREFIX . "my_structure`.`link` LIKE '%" . $id . "%'
+	    AND `" . DB_PREFIX . "my_structure`.`type` = 1
         ");
 
         if (DB::nr($q) <> 0) {
@@ -63,16 +64,10 @@ class ModelCategory extends Model {
     }
 
     public function getProductsNumber($id) {
+
 	$q = DB::q("
             SELECT
-            `" . DB_PREFIX . "my_structure`.`link`,
-            `" . DB_PREFIX . "products`.`products_price`,
-            `" . DB_PREFIX . "products`.`products_sort_order`,
-            `" . DB_PREFIX . "products`.`products_image`,
-            `" . DB_PREFIX . "products_to_categories`.`products_id`,
-            `" . DB_PREFIX . "products_description`.`products_name`,
-            `" . DB_PREFIX . "products_description`.`products_img_title`,
-            `" . DB_PREFIX . "products_description`.`products_img_alt`
+            `" . DB_PREFIX . "products_to_categories`.`products_id`
             FROM `" . DB_PREFIX . "products`
             LEFT JOIN `" . DB_PREFIX . "products_to_categories`
             ON `" . DB_PREFIX . "products_to_categories`.`products_id` = `" . DB_PREFIX . "products`.`products_id` 
@@ -84,7 +79,6 @@ class ModelCategory extends Model {
             AND `" . DB_PREFIX . "products`.`products_status` = 1
             AND `" . DB_PREFIX . "products_description`.`products_name` IS NOT NULL
             AND `" . DB_PREFIX . "my_structure`.`link` LIKE '%-p-%'
-            GROUP BY `" . DB_PREFIX . "my_structure`.`link`
             ORDER BY `" . DB_PREFIX . "products`.`products_sort_order`
         ");
 
@@ -97,35 +91,7 @@ class ModelCategory extends Model {
     }
 	
     public function getProductsByCategory($id,$limit_start,$limit_end) {
-        /*
-          $q = DB::q("
-          SELECT
-          AVG(`rating_num`) as rating,
-          `".DB_PREFIX."my_structure`.`link`,
-          `".DB_PREFIX."products`.`products_price`,
-          `".DB_PREFIX."products`.`products_sort_order`,
-          `".DB_PREFIX."products`.`products_image`,
-          `".DB_PREFIX."products_to_categories`.`products_id`,
-          `".DB_PREFIX."products_description`.`products_name`,
-          `".DB_PREFIX."products_description`.`products_img_title`,
-          `".DB_PREFIX."products_description`.`products_img_alt`
-          FROM `".DB_PREFIX."products`
-          LEFT JOIN `".DB_PREFIX."products_to_categories`
-          ON `".DB_PREFIX."products_to_categories`.`products_id` = `".DB_PREFIX."products`.`products_id`
-          LEFT JOIN `".DB_PREFIX."my_structure`
-          ON `".DB_PREFIX."my_structure`.`idt` = `".DB_PREFIX."products`.`products_id`
 
-          LEFT JOIN `".DB_PREFIX."ratings`
-          ON `".DB_PREFIX."ratings`.`rating_id` = `".DB_PREFIX."products`.`products_id`
-
-          LEFT JOIN `".DB_PREFIX."products_description`
-          ON `".DB_PREFIX."products_description`.`products_id` = `".DB_PREFIX."products`.`products_id`
-          WHERE `".DB_PREFIX."products_to_categories`.`categories_id` = '".$id."'
-          AND `".DB_PREFIX."products_description`.`products_name` IS NOT NULL
-          AND `".DB_PREFIX."my_structure`.`link` LIKE '%-p-%'
-          GROUP BY `".DB_PREFIX."my_structure`.`link`
-          ORDER BY `".DB_PREFIX."products`.`products_sort_order`
-          "); */
         if($limit_start !=='' && $limit_end !==''){
             $limit = "LIMIT ".$limit_start.",".$limit_end;
         }else{$limit = '';}

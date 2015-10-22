@@ -12,6 +12,7 @@ class Template extends Controller {
     
     function __construct(){
         $this->view = new Controller_View();
+        $this->response = new Response();
     }
 
     public function action_index($link) {
@@ -26,7 +27,8 @@ class Template extends Controller {
         if ($content['template']) {
             $this->view->getHeader('header.tpl', $content['template']);
         } else {
-            $this->view->getContent('404.tpl', '');
+            //$this->view->getContent('error.php');
+            $this->response->redirectToMainSite();
         }
     }
 
@@ -38,8 +40,8 @@ class Template extends Controller {
     public function getListArticles($id) {
        $template = new ModelTemplate();
        $content = $template->getListArticlesById($id);
-       echo "<div class='container'><div class = 'row contact-store'><p></p><ul>";
+       echo "<div class='container'><div class = 'row contact-store'><ul>";
        $this->view->getContent('list-articles.tpl', $content);
        echo "</ul></div></div>";
-    }
+     }
 }
